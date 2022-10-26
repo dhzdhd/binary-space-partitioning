@@ -1,7 +1,13 @@
 #pragma once
 
-constexpr int A{0};
+#include "raylib.h"
 
-class Collision
+struct Node
 {
+    Node *left;
+    Node *right;
+    Vector2 data;
 };
+
+void addNode(Node *left, Node *right, Vector2 data);
+void deleteNode(Node *node);

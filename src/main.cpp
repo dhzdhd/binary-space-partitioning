@@ -1,26 +1,30 @@
 #include "raylib.h"
+#include <cstdlib>
 #include "bsp.hpp"
+#include "sim.hpp"
 
 int main()
 {
     // Initialization
-    const int screenWidth = 800;
-    const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Binary Space Partitioning");
 
     SetTargetFPS(60);
 
     // Main game loop
-    while (!WindowShouldClose()) // Detect window close button or ESC key
+    while (!WindowShouldClose())
     {
         // Update
+        if (IsKeyPressed(KEY_Q))
+        {
+            std::exit(0);
+        }
 
         // Draw
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+        DrawFPS(0, 0);
 
         EndDrawing();
     }
