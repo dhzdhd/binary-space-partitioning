@@ -3,6 +3,7 @@
 #include "bsp.hpp"
 #include "sim.hpp"
 #include <vector>
+#include <iostream>
 
 int main()
 {
@@ -28,11 +29,20 @@ int main()
             isRectangleMode = !isRectangleMode;
         }
 
+        if (isRectangleMode)
+        {
+            if (IsMouseButtonDown(0))
+            {
+                std::cout << "e";
+            }
+        }
+
         // Draw
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
         DrawFPS(0, 0);
+        DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
 
         EndDrawing();
     }
