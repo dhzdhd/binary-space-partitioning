@@ -13,7 +13,7 @@ int main()
     bool isRectangleMode{true};
 
     std::vector<Rect> geometryVec{};
-    std::vector<Ball> objectVec{};
+    std::vector<Object> objectVec{};
 
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
@@ -100,6 +100,21 @@ int main()
             player.pos.x += player.vel.x;
             player.pos.y += player.vel.y;
 
+            if (IsMouseButtonPressed(0))
+            {
+                Vector2 pos = GetMousePosition();
+                objectVec.push_back(Object{
+                    player.pos,
+                    Vector2{100, 100},
+                });
+            }
+
+            for (Object obj : objectVec)
+            {
+                obj.pos.x += obj.vel.x;
+                obj.pos.y += obj.vel.y;
+            }
+
             // run bsp tree and create partitions
             // run simulation
         }
@@ -118,6 +133,14 @@ int main()
         }
 
         DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
+
+        if (!isRectangleMode)
+        {
+            for (Object obj : objectVec)
+            {
+                DrawCircle(obj.pos.x, obj.pos.y, 2, RED);
+            }
+        }
 
         EndDrawing();
     }

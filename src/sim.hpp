@@ -10,11 +10,10 @@ struct Rect
     Vector2 corner2;
 };
 
-struct Ball
+struct Object
 {
     Vector2 pos;
     Vector2 vel;
-    Color color;
 };
 
 struct Player
