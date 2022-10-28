@@ -6,8 +6,8 @@ constexpr int SCREEN_HEIGHT{450};
 
 struct Rect
 {
-    Vector2 end1;
-    Vector2 end2;
+    Vector2 corner1;
+    Vector2 corner2;
 };
 
 struct Ball
@@ -16,3 +16,10 @@ struct Ball
     Vector2 vel;
     Color color;
 };
+
+struct Player
+{
+    Vector2 pos;
+};
+
+double absd(double val);

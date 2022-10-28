@@ -13,6 +13,10 @@ int main()
     bool isRectangleMode{true};
     std::vector<Rect> geometryVec{};
     std::vector<Ball> objectVec{};
+    Vector2 mousePos{};
+    Vector2 mouseDraggedPos{};
+    bool isDragged = false;
+    Player player = {Vector2{0, 0}};
 
     SetTargetFPS(60);
 
@@ -31,10 +35,26 @@ int main()
 
         if (isRectangleMode)
         {
+            if (IsMouseButtonPressed(0))
+            {
+                mousePos = GetMousePosition();
+                std::cout << GetMousePosition().x << " " << GetMousePosition().y << "\n";
+            }
             if (IsMouseButtonDown(0))
             {
-                std::cout << "e";
+                Vector2 dragVec = GetGestureDragVector();
+                mouseDraggedPos = Vector2{mousePos.x + dragVec.x * SCREEN_WIDTH, mousePos.y + dragVec.y * SCREEN_HEIGHT};
+                std::cout << mouseDraggedPos.x << " " << mouseDraggedPos.y << "\n";
             }
+            if (IsMouseButtonReleased(0))
+            {
+                geometryVec.push_back(Rect{mousePos, mouseDraggedPos});
+            }
+        }
+        else
+        {
+            // run bsp tree and create partitions
+            // run simulation
         }
 
         // Draw
@@ -44,10 +64,21 @@ int main()
         DrawFPS(0, 0);
         DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
 
+        // draw rects
+        for (Rect rec : geometryVec)
+        {
+            DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
+        }
+
         EndDrawing();
     }
 
     CloseWindow();
 
     return 0;
+}
+
+double absd(double value)
+{
+    return value < 0 ? -value : value;
 }
