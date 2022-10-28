@@ -57,19 +57,19 @@ int main()
         {
             if (IsKeyDown(KEY_RIGHT))
             {
-                player.vel.x = 50 * GetFrameTime();
+                player.vel.x = 200 * GetFrameTime();
             }
             if (IsKeyDown(KEY_LEFT))
             {
-                player.vel.x = -50 * GetFrameTime();
+                player.vel.x = -200 * GetFrameTime();
             }
             if (IsKeyDown(KEY_UP))
             {
-                player.vel.y = -50 * GetFrameTime();
+                player.vel.y = -200 * GetFrameTime();
             }
             if (IsKeyDown(KEY_DOWN))
             {
-                player.vel.y = 50 * GetFrameTime();
+                player.vel.y = 200 * GetFrameTime();
             }
             if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT))
             {
@@ -80,8 +80,26 @@ int main()
                 player.vel.y = 0;
             }
 
+            if (player.pos.x < 0)
+            {
+                player.pos.x = 0;
+            }
+            if (player.pos.x > SCREEN_WIDTH)
+            {
+                player.pos.x = SCREEN_WIDTH;
+            }
+            if (player.pos.y < 0)
+            {
+                player.pos.y = 0;
+            }
+            if (player.pos.y > SCREEN_HEIGHT)
+            {
+                player.pos.y = SCREEN_HEIGHT;
+            }
+
             player.pos.x += player.vel.x;
             player.pos.y += player.vel.y;
+
             // run bsp tree and create partitions
             // run simulation
         }
