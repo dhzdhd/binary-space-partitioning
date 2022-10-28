@@ -11,12 +11,14 @@ int main()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Binary Space Partitioning");
 
     bool isRectangleMode{true};
+
     std::vector<Rect> geometryVec{};
     std::vector<Ball> objectVec{};
+
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
-    bool isDragged = false;
-    Player player = {Vector2{0, 0}};
+
+    Player player = {Vector2{5, 5}, Vector2{0, 0}};
 
     SetTargetFPS(60);
 
@@ -53,6 +55,33 @@ int main()
         }
         else
         {
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                player.vel.x = 50 * GetFrameTime();
+            }
+            if (IsKeyDown(KEY_LEFT))
+            {
+                player.vel.x = -50 * GetFrameTime();
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                player.vel.y = -50 * GetFrameTime();
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                player.vel.y = 50 * GetFrameTime();
+            }
+            if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT))
+            {
+                player.vel.x = 0;
+            }
+            if (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN))
+            {
+                player.vel.y = 0;
+            }
+
+            player.pos.x += player.vel.x;
+            player.pos.y += player.vel.y;
             // run bsp tree and create partitions
             // run simulation
         }
@@ -69,6 +98,8 @@ int main()
         {
             DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
         }
+
+        DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
 
         EndDrawing();
     }

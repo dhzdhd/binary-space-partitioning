@@ -20,6 +20,7 @@ struct Ball
 struct Player
 {
     Vector2 pos;
+    Vector2 vel;
 };
 
 double absd(double val);
