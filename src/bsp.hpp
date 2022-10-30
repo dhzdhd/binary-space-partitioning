@@ -2,13 +2,22 @@
 
 #include "raylib.h"
 #include "sim.hpp"
+#include <vector>
+
+enum Orientation
+{
+    vertical,
+    horizontal,
+    none,
+};
 
 struct Node
 {
     Node *left;
     Node *right;
-    Rect data;
+    std::vector<Rect> data;
+    Orientation orientation;
 };
 
-void addNode(Node *left, Node *right, Rect data);
-void deleteNode(Node *node);
+Node *createBSPTree(std::vector<Rect> &geometryVec, int depth);
+Rect pickSplittingPlane(std::vector<Rect> geometryVec);

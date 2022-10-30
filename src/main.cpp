@@ -11,6 +11,7 @@ int main()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Binary Space Partitioning");
 
     bool isRectangleMode{true};
+    bool isGeometryUpdated{false};
 
     std::vector<Rect> geometryVec{};
     std::vector<Object> objectVec{};
@@ -37,6 +38,9 @@ int main()
 
         if (isRectangleMode)
         {
+            // Rectangle Mode
+            isGeometryUpdated = false;
+
             if (IsMouseButtonPressed(0))
             {
                 mousePos = GetMousePosition();
@@ -55,6 +59,7 @@ int main()
         }
         else
         {
+            // Sim Mode
             if (IsKeyDown(KEY_RIGHT))
             {
                 player.vel.x = 200 * GetFrameTime();
@@ -97,9 +102,11 @@ int main()
                 player.pos.y = SCREEN_HEIGHT;
             }
 
+            // Move player
             player.pos.x += player.vel.x;
             player.pos.y += player.vel.y;
 
+            // Create projectile
             if (IsMouseButtonPressed(0))
             {
                 Vector2 pos = GetMousePosition();
@@ -109,10 +116,19 @@ int main()
                 });
             }
 
+            // Move projectiles in list
             for (Object obj : objectVec)
             {
                 obj.pos.x += obj.vel.x;
                 obj.pos.y += obj.vel.y;
+            }
+
+            // Create BSP tree based on geometryVec
+            if (!isGeometryUpdated)
+            {
+                isGeometryUpdated = true;
+
+                Node *root = createBSPTree(geometryVec, vertical);
             }
 
             // run bsp tree and create partitions
