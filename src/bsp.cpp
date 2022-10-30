@@ -1,5 +1,8 @@
 #include "bsp.hpp"
 #include "sim.hpp"
+#include <algorithm>
+#include <iostream>
+#include <math.h>
 
 Node *createBSPTree(std::vector<Rect> &geometryVec, int depth)
 {
@@ -38,5 +41,15 @@ Rect pickSplittingPlane(std::vector<Rect> geometryVec)
     {
         xCoordsVec.push_back(absd(rect.corner1.x) + absd(rect.corner2.x - rect.corner1.x) / 2.0);
         yCoordsVec.push_back(absd(rect.corner1.y) + absd(rect.corner2.y - rect.corner1.y) / 2.0);
+    }
+
+    std::sort(xCoordsVec.begin(), xCoordsVec.end());
+    std::sort(yCoordsVec.begin(), yCoordsVec.end());
+
+    if ((xCoordsVec.end() - xCoordsVec.begin()) > (yCoordsVec.end() - yCoordsVec.begin()))
+    {
+    }
+    else
+    {
     }
 }
