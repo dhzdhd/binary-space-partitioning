@@ -128,7 +128,7 @@ int main()
             {
                 isGeometryUpdated = true;
 
-                Node *root = createBSPTree(geometryVec, 0);
+                Node *root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
             }
 
             // run bsp tree and create partitions

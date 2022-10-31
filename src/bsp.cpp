@@ -4,7 +4,7 @@
 #include <iostream>
 #include <math.h>
 
-Node *createBSPTree(std::vector<Rect> &geometryVec, int depth)
+Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
 {
     if (geometryVec.size() == 0)
     {
@@ -18,21 +18,68 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth)
             nullptr,
             nullptr,
             geometryVec,
-            none,
         };
     }
 
     std::vector<Rect> frontVec, backVec;
-    Rect plane = pickSplittingPlane(geometryVec);
+    Rect plane = pickSplittingPlane(geometryVec, depth, remainingScreen);
 
     for (int i = 0; i < numGeometries; i++)
     {
         Rect rect = geometryVec.at(i);
         Rect frontPart, backPart;
+
+        switch (classifyRectToPlane(rect, plane))
+        {
+        case front:
+        {
+            frontVec.push_back(rect);
+            break;
+        }
+        case behind:
+        {
+            backVec.push_back(rect);
+            break;
+        }
+        case straddling:
+        {
+            // split polygon and get 2 parts to push to 2 lists
+            Rect front;
+            Rect back;
+
+            frontVec.push_back(front);
+            backVec.push_back(back);
+            break;
+        }
+        default:
+            break;
+        }
     }
+
+    // front = right, top
+    // back = left, bottom
+
+    Rect frontPlane{};
+    Rect backPlane{};
+
+    if (depth % 2 == 0)
+    {
+        // vertical
+        frontPlane = Rect{plane.corner1, remainingScreen.corner2};
+        backPlane = Rect{remainingScreen.corner1, plane.corner2};
+    }
+    else
+    {
+        // horizontal
+        frontPlane = Rect{remainingScreen.corner1, plane.corner2};
+        backPlane = Rect{plane.corner1, remainingScreen.corner2};
+    }
+    Node *frontTree = createBSPTree(frontVec, depth + 1, frontPlane);
+    Node *backTree = createBSPTree(backVec, depth + 1, backPlane);
+    return new Node{backTree, frontTree, geometryVec};
 }
 
-Rect pickSplittingPlane(std::vector<Rect> geometryVec)
+Rect pickSplittingPlane(std::vector<Rect> geometryVec, int depth, Rect remainingScreen)
 {
     std::vector<double> xCoordsVec{};
     std::vector<double> yCoordsVec{};
@@ -46,10 +93,20 @@ Rect pickSplittingPlane(std::vector<Rect> geometryVec)
     std::sort(xCoordsVec.begin(), xCoordsVec.end());
     std::sort(yCoordsVec.begin(), yCoordsVec.end());
 
-    if ((xCoordsVec.end() - xCoordsVec.begin()) > (yCoordsVec.end() - yCoordsVec.begin()))
+    if (depth % 2 == 0)
     {
+        // vertical
+        float x = remainingScreen.corner1.x + (remainingScreen.corner2.x - remainingScreen.corner1.x) / 2;
+        return Rect{Vector2{x, remainingScreen.corner1.y}, Vector2{x, remainingScreen.corner2.y}};
     }
     else
     {
+        // horizontal
+        float y = remainingScreen.corner1.y + (remainingScreen.corner2.y - remainingScreen.corner1.y) / 2;
+        return Rect{Vector2{remainingScreen.corner1.x, y}, Vector2{remainingScreen.corner2.x, y}};
     }
+}
+
+RectLocation classifyRectToPlane(Rect rect, Rect plane)
+{
 }
