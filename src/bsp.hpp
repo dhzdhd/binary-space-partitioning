@@ -26,6 +26,13 @@ struct Node
     // Orientation orientation;
 };
 
+struct SplitRect
+{
+    Rect front;
+    Rect back;
+};
+
 Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen);
 RectLocation classifyRectToPlane(Rect rect, Rect plane);
-Rect pickSplittingPlane(std::vector<Rect> geometryVec);
+Rect pickSplittingPlane(std::vector<Rect> geometryVec, int depth, Rect remainingScreen);
+SplitRect splitRectangleAsPerPlane(Rect rect, Rect plane);
