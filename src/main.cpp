@@ -163,10 +163,10 @@ int main()
         DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
 
         // draw rects
-        for (Rect rec : geometryVec)
-        {
-            DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
-        }
+        // for (Rect rec : geometryVec)
+        // {
+        //     DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
+        // }
 
         // DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
 

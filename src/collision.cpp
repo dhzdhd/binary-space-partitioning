@@ -36,7 +36,7 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
         }
     }
 
-    return root->data;
+    return temp->data;
 }
 
 ObjectLocation classifyObjectToPlane(Object obj, Rect plane)
