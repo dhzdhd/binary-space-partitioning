@@ -21,12 +21,12 @@ int main()
 
     Node *root;
 
-    Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{5, 5}};
+    Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{1, 1}};
 
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
 
-    Player player = {Vector2{5, 5}, Vector2{-100, 100}};
+    Player player = {Vector2{5, 5}, Vector2{-10, 10}};
 
     SetTargetFPS(60);
 
@@ -182,7 +182,6 @@ int main()
         if (!isRectangleMode)
         {
             // Draw active rectangles
-            // FIXME: Rects wrongly colored if on partitions
             for (Rect rec : geometryVecActive)
             {
                 DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);

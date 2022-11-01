@@ -146,15 +146,15 @@ SplitRect splitRectangleAsPerPlane(Rect rect, Rect plane)
     if (plane.corner1.x == plane.corner2.x)
     {
         // vertical
-        Rect behind = Rect{rect.corner1, Vector2{plane.corner1.x, rect.corner2.y}};
-        Rect front = Rect{Vector2{plane.corner1.x, rect.corner1.y}, rect.corner2};
+        Rect front = Rect{rect.corner1, Vector2{plane.corner1.x, rect.corner2.y}};
+        Rect behind = Rect{Vector2{plane.corner1.x, rect.corner1.y}, rect.corner2};
         return SplitRect{behind, front};
     }
     else
     {
         // horizontal
-        Rect behind = Rect{Vector2{rect.corner1.x, plane.corner1.y}, rect.corner2};
-        Rect front = Rect{rect.corner1, Vector2{rect.corner2.x, plane.corner1.y}};
+        Rect front = Rect{Vector2{rect.corner1.x, plane.corner1.y}, rect.corner2};
+        Rect behind = Rect{rect.corner1, Vector2{rect.corner2.x, plane.corner1.y}};
         return SplitRect{behind, front};
     }
 }
