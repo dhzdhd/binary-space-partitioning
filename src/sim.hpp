@@ -23,3 +23,4 @@ struct Player
 };
 
 double absd(double val);
+Vector2 getRandomVector(int min, int max);

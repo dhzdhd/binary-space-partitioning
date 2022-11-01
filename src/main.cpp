@@ -143,7 +143,7 @@ int main()
 
             if (IsMouseButtonPressed(0))
             {
-                objectVec.push_back(Object{GetMousePosition(), Vector2{1, 1}});
+                objectVec.push_back(Object{GetMousePosition(), getRandomVector(-100, 100)});
             }
 
             for (Object &obj : objectVec)
@@ -232,4 +232,12 @@ int main()
 double absd(double value)
 {
     return value < 0 ? -value : value;
+}
+
+Vector2 getRandomVector(int min, int max)
+{
+    return Vector2{
+        GetRandomValue(min, max) * 0.05f,
+        GetRandomValue(min, max) * 0.05f,
+    };
 }
