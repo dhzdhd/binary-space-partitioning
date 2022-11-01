@@ -40,6 +40,8 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
         }
     }
 
+    // Move out of this function
+    // Draws partitions as per projectile position
     for (auto rect : planeVec)
     {
         if (rect.corner1.x == rect.corner2.x)
