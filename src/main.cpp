@@ -154,8 +154,16 @@ int main()
                 obj.pos.x += obj.vel.x;
                 obj.pos.y += obj.vel.y;
 
-                geometryVecActive = getVecFromTree(root, obj);
-                geometryVecCollision = resolveCollisionWithRects(geometryVecActive, obj);
+                auto temp = getVecFromTree(root, obj);
+                geometryVecActive.insert(
+                    geometryVecActive.end(),
+                    temp.begin(),
+                    temp.end());
+                temp = resolveCollisionWithRects(geometryVecActive, obj);
+                geometryVecCollision.insert(
+                    geometryVecCollision.end(),
+                    temp.begin(),
+                    temp.end());
             }
 
             // for (Rect rec : geometryVecActive)
@@ -206,6 +214,9 @@ int main()
             {
                 DrawCircle(obj.pos.x, obj.pos.y, 5, BLUE);
             }
+
+            geometryVecActive.clear();
+            geometryVecCollision.clear();
         }
 
         // DrawCircle(obj.pos.x, obj.pos.y, 5, BLUE);
