@@ -19,9 +19,10 @@ int main()
     std::vector<Rect> geometryVecCollision{};
     std::vector<Rect> planeVec{};
 
-    Node *root;
-
     Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{1, 1}};
+    std::vector<Object> objectVec{obj};
+
+    Node *root;
 
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
@@ -123,13 +124,6 @@ int main()
             //     });
             // }
 
-            // Move projectile
-            obj.pos.x += obj.vel.x;
-            obj.pos.y += obj.vel.y;
-
-            // Check collision of projectile with screen
-            resolveCollisionWithScreen(obj);
-
             Node *root;
             // Create BSP tree based on geometryVec
             if (!isGeometryUpdated)
@@ -137,14 +131,33 @@ int main()
                 isGeometryUpdated = true;
 
                 root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
+
+                if (root == nullptr)
+                {
+                    isRectangleMode = true;
+                }
             }
 
             // int depth = 0;
             // Node *temp = root;
 
-            geometryVecActive = getVecFromTree(root, obj);
-            geometryVecCollision = resolveCollisionWithRects(geometryVecActive, obj);
-            std::cout << geometryVec.size() << std::endl;
+            if (IsMouseButtonPressed(0))
+            {
+                objectVec.push_back(Object{GetMousePosition(), Vector2{1, 1}});
+            }
+
+            for (Object &obj : objectVec)
+            {
+                // Check collision of projectile with screen
+                resolveCollisionWithScreen(obj);
+
+                obj.pos.x += obj.vel.x;
+                obj.pos.y += obj.vel.y;
+
+                geometryVecActive = getVecFromTree(root, obj);
+                geometryVecCollision = resolveCollisionWithRects(geometryVecActive, obj);
+            }
+
             // for (Rect rec : geometryVecActive)
             // {
             //     DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
@@ -177,20 +190,25 @@ int main()
 
         // DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
 
-        DrawCircle(obj.pos.x, obj.pos.y, 5, RED);
-
         if (!isRectangleMode)
         {
             // Draw active rectangles
             for (Rect rec : geometryVecActive)
             {
-                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
+                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(YELLOW, 0.7f));
             }
             for (Rect rec : geometryVecCollision)
             {
-                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, RED);
+                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(RED, 0.7f));
+            }
+
+            for (Object obj : objectVec)
+            {
+                DrawCircle(obj.pos.x, obj.pos.y, 5, BLUE);
             }
         }
+
+        // DrawCircle(obj.pos.x, obj.pos.y, 5, BLUE);
 
         EndDrawing();
     }
