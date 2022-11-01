@@ -1,8 +1,8 @@
 #pragma once
 #include "raylib.h"
 
-constexpr int SCREEN_WIDTH{800};
-constexpr int SCREEN_HEIGHT{450};
+constexpr int SCREEN_WIDTH{1600};
+constexpr int SCREEN_HEIGHT{900};
 
 struct Rect
 {

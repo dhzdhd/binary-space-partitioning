@@ -23,7 +23,7 @@ struct Node
     Node *left;
     Node *right;
     std::vector<Rect> data;
-    // Orientation orientation;
+    Rect plane;
 };
 
 struct SplitRect

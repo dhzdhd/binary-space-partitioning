@@ -6,7 +6,7 @@
 
 Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
 {
-    if (geometryVec.size() == 0)
+    if (geometryVec.empty())
     {
         return nullptr;
     }
@@ -14,10 +14,12 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
     int numGeometries = geometryVec.size();
     if (depth >= 10 || numGeometries <= 2)
     {
+        std::cout << "depth: " << depth << std::endl;
         return new Node{
             nullptr,
             nullptr,
             geometryVec,
+            Rect{Vector2{0, 0}, Vector2{0, 0}},
         };
     }
 
@@ -77,7 +79,7 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
     }
     Node *frontTree = createBSPTree(frontVec, depth + 1, frontPlane);
     Node *backTree = createBSPTree(backVec, depth + 1, backPlane);
-    return new Node{backTree, frontTree, geometryVec};
+    return new Node{backTree, frontTree, geometryVec, plane};
 }
 
 Rect pickSplittingPlane(std::vector<Rect> geometryVec, int depth, Rect remainingScreen)

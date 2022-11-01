@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "bsp.hpp"
 #include "sim.hpp"
+#include "collision.hpp"
 #include <vector>
 #include <iostream>
 
@@ -16,10 +17,12 @@ int main()
     std::vector<Rect> geometryVec{};
     std::vector<Object> objectVec{};
 
+    Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{5, 5}};
+
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
 
-    Player player = {Vector2{5, 5}, Vector2{0, 0}};
+    Player player = {Vector2{5, 5}, Vector2{-100, 100}};
 
     SetTargetFPS(60);
 
@@ -107,32 +110,49 @@ int main()
             player.pos.y += player.vel.y;
 
             // Create projectile
-            if (IsMouseButtonPressed(0))
-            {
-                Vector2 pos = GetMousePosition();
-                objectVec.push_back(Object{
-                    player.pos,
-                    Vector2{100, 100},
-                });
-            }
+            // if (IsMouseButtonPressed(0))
+            // {
+            //     Vector2 pos = GetMousePosition();
+            //     objectVec.push_back(Object{
+            //         player.pos,
+            //         Vector2{100, 100},
+            //     });
+            // }
 
-            // Move projectiles in list
-            for (Object obj : objectVec)
-            {
-                obj.pos.x += obj.vel.x;
-                obj.pos.y += obj.vel.y;
-            }
+            // Move projectile
+            obj.pos.x += obj.vel.x;
+            obj.pos.y += obj.vel.y;
 
+            // Check collision of projectile with screen
+            resolveCollisionWithScreen(obj);
+
+            Node *root;
             // Create BSP tree based on geometryVec
             if (!isGeometryUpdated)
             {
                 isGeometryUpdated = true;
 
-                Node *root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
+                root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
             }
 
-            // run bsp tree and create partitions
-            // run simulation
+            int depth = 0;
+            Node *temp = root;
+
+            auto vec = getVecFromTree(root, obj);
+            std::cout << vec.size() << std::endl;
+            for (auto i : vec)
+            {
+                DrawRectangle(i.corner1.x, i.corner1.y, absd(i.corner2.x - i.corner1.x), absd(i.corner2.y - i.corner1.y), YELLOW);
+            }
+            // while (temp->left != nullptr && temp != nullptr)
+            // {
+
+            //     DrawRectangle(temp->plane.corner1.x, temp->plane.corner1.y, (depth % 2 == 0) ? 2 : temp->plane.corner2.x - temp->plane.corner1.x, (depth % 2 == 0) ? temp->plane.corner2.y - temp->plane.corner1.y : 2, GREEN);
+            //     std::cout
+            //         << std::endl;
+            //     depth++;
+            //     temp = temp->left;
+            // }
         }
 
         // Draw
@@ -148,15 +168,15 @@ int main()
             DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
         }
 
-        DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
+        // DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
 
-        if (!isRectangleMode)
-        {
-            for (Object obj : objectVec)
-            {
-                DrawCircle(obj.pos.x, obj.pos.y, 2, RED);
-            }
-        }
+        // if (!isRectangleMode)
+        // {
+        // for (Object obj : objectVec)
+        // {
+        DrawCircle(obj.pos.x, obj.pos.y, 5, RED);
+        // }
+        // }
 
         EndDrawing();
     }
