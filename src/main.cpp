@@ -15,7 +15,11 @@ int main()
     bool isGeometryUpdated{false};
 
     std::vector<Rect> geometryVec{};
-    std::vector<Object> objectVec{};
+    std::vector<Rect> geometryVecActive{};
+    std::vector<Rect> geometryVecCollision{};
+    std::vector<Rect> planeVec{};
+
+    Node *root;
 
     Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{5, 5}};
 
@@ -135,15 +139,15 @@ int main()
                 root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
             }
 
-            int depth = 0;
-            Node *temp = root;
+            // int depth = 0;
+            // Node *temp = root;
 
-            auto vec = getVecFromTree(root, obj);
-            std::cout << vec.size() << std::endl;
-            for (auto i : vec)
-            {
-                DrawRectangle(i.corner1.x, i.corner1.y, absd(i.corner2.x - i.corner1.x), absd(i.corner2.y - i.corner1.y), YELLOW);
-            }
+            geometryVecActive = getVecFromTree(root, obj);
+            std::cout << geometryVec.size() << std::endl;
+            // for (Rect rec : geometryVecActive)
+            // {
+            //     DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
+            // }
             // while (temp->left != nullptr && temp != nullptr)
             // {
 
@@ -162,21 +166,26 @@ int main()
         DrawFPS(0, 0);
         DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
 
-        // draw rects
-        // for (Rect rec : geometryVec)
-        // {
-        //     DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
-        // }
+        // Draw handmade rectangles
+        for (Rect rec : geometryVec)
+        {
+            DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
+        }
+
+        // geometryVecActive.clear();
 
         // DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
 
-        // if (!isRectangleMode)
-        // {
-        // for (Object obj : objectVec)
-        // {
         DrawCircle(obj.pos.x, obj.pos.y, 5, RED);
-        // }
-        // }
+
+        if (!isRectangleMode)
+        {
+            // Draw active rectangles
+            for (Rect rec : geometryVecActive)
+            {
+                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
+            }
+        }
 
         EndDrawing();
     }
