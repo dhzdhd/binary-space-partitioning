@@ -16,9 +16,13 @@ void resolveCollisionWithScreen(Object &obj)
 std::vector<Rect> getVecFromTree(Node *root, Object &obj)
 {
     Node *temp = root;
+    std::vector<Rect> planeVec{};
+
     while (temp->right != nullptr && temp->left != nullptr)
     {
         ObjectLocation location = classifyObjectToPlane(obj, temp->plane);
+        planeVec.push_back(temp->plane);
+
         switch (location)
         {
         case positive:
@@ -33,6 +37,19 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
         }
         default:
             break;
+        }
+    }
+
+    for (auto rect : planeVec)
+    {
+        if (rect.corner1.x == rect.corner2.x)
+        {
+            // vert
+            DrawRectangle(rect.corner1.x, rect.corner1.y, 2, rect.corner2.y - rect.corner1.y, GREEN);
+        }
+        else
+        {
+            DrawRectangle(rect.corner1.x, rect.corner1.y, rect.corner2.x - rect.corner1.x, 2, GREEN);
         }
     }
 
