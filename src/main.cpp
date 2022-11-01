@@ -143,6 +143,7 @@ int main()
             // Node *temp = root;
 
             geometryVecActive = getVecFromTree(root, obj);
+            geometryVecCollision = resolveCollisionWithRects(geometryVecActive, obj);
             std::cout << geometryVec.size() << std::endl;
             // for (Rect rec : geometryVecActive)
             // {
@@ -169,7 +170,7 @@ int main()
         // Draw handmade rectangles
         for (Rect rec : geometryVec)
         {
-            DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, GRAY);
+            DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(GRAY, 0.1f));
         }
 
         // geometryVecActive.clear();
@@ -184,6 +185,10 @@ int main()
             for (Rect rec : geometryVecActive)
             {
                 DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
+            }
+            for (Rect rec : geometryVecCollision)
+            {
+                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, RED);
             }
         }
 

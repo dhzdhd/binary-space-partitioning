@@ -13,6 +13,21 @@ void resolveCollisionWithScreen(Object &obj)
     }
 }
 
+std::vector<Rect> resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj)
+{
+    std::vector<Rect> collisionVec{};
+    for (auto rect : rectVec)
+    {
+        bool collision = CheckCollisionCircleRec(obj.pos, 5, Rectangle{rect.corner1.x, rect.corner2.y, rect.corner2.x - rect.corner1.x, rect.corner2.y - rect.corner1.y});
+        if (collision)
+        {
+            collisionVec.push_back(rect);
+        }
+    }
+
+    return collisionVec;
+}
+
 std::vector<Rect> getVecFromTree(Node *root, Object &obj)
 {
     Node *temp = root;
@@ -40,7 +55,7 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
         }
     }
 
-    // Move out of this function
+    // TODO: Move out of this function by returning planeVec
     // Draws partitions as per projectile position
     for (auto rect : planeVec)
     {
