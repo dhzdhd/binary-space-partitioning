@@ -15,6 +15,7 @@ void resolveCollisionWithScreen(Object &obj)
 
 std::vector<Rect> resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj)
 {
+    // FIXME: Collision checking is slightly off
     std::vector<Rect> collisionVec{};
     for (auto rect : rectVec)
     {

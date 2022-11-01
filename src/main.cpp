@@ -182,6 +182,7 @@ int main()
         if (!isRectangleMode)
         {
             // Draw active rectangles
+            // FIXME: Rects wrongly colored if on partitions
             for (Rect rec : geometryVecActive)
             {
                 DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
