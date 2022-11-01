@@ -15,11 +15,16 @@ void resolveCollisionWithScreen(Object &obj)
 
 std::vector<Rect> resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj)
 {
-    // FIXME: Collision checking is slightly off
     std::vector<Rect> collisionVec{};
     for (auto rect : rectVec)
     {
-        bool collision = CheckCollisionCircleRec(obj.pos, 5, Rectangle{rect.corner1.x, rect.corner2.y, rect.corner2.x - rect.corner1.x, rect.corner2.y - rect.corner1.y});
+        Rectangle raylibRect = Rectangle{
+            rect.corner1.x,
+            rect.corner1.y,
+            rect.corner2.x - rect.corner1.x,
+            rect.corner2.y - rect.corner1.y,
+        };
+        bool collision = CheckCollisionCircleRec(obj.pos, 5, raylibRect);
         if (collision)
         {
             collisionVec.push_back(rect);
