@@ -200,6 +200,7 @@ int main()
         ClearBackground(RAYWHITE);
         DrawFPS(0, 0);
         DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
+        DrawText(isBSPCollision ? "BSP collision" : "Naive collision", 0, 40, 20, GREEN);
 
         // Draw handmade rectangles
         for (Rect rec : geometryVec)

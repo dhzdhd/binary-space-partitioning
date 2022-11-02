@@ -2,6 +2,7 @@
 #include "sim.hpp"
 #include <algorithm>
 #include <iostream>
+#include <vector>
 #include <math.h>
 
 Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
@@ -85,18 +86,22 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
 Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
 {
     // Commented code needed to split by median.
-    // std::vector<double> xCoordsVec{};
-    // std::vector<double> yCoordsVec{};
+    std::vector<double> xCoordsVec{};
+    std::vector<double> yCoordsVec{};
 
-    // for (Rect rect : geometryVec)
-    // {
-    //     xCoordsVec.push_back(absd(rect.corner1.x) + absd(rect.corner2.x - rect.corner1.x) / 2.0);
-    //     yCoordsVec.push_back(absd(rect.corner1.y) + absd(rect.corner2.y - rect.corner1.y) / 2.0);
-    // }
+    for (Rect rect : geometryVec)
+    {
+        xCoordsVec.push_back(absd(rect.corner1.x) + absd(rect.corner2.x - rect.corner1.x) / 2.0);
+        yCoordsVec.push_back(absd(rect.corner1.y) + absd(rect.corner2.y - rect.corner1.y) / 2.0);
+    }
+
+    auto xMax = std::max_element(xCoordsVec.begin(), xCoordsVec.end());
+    auto xMin = std::min_element(xCoordsVec.begin(), xCoordsVec.end());
 
     // std::sort(xCoordsVec.begin(), xCoordsVec.end());
     // std::sort(yCoordsVec.begin(), yCoordsVec.end());
 
+    // Alternatively split in half based on depth
     if (depth % 2 == 0)
     {
         // vertical
