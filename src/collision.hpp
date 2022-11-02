@@ -3,7 +3,7 @@
 #include "sim.hpp"
 #include "bsp.hpp"
 
-enum ObjectLocation
+enum class ObjectLocation
 {
     positive,
     negative,

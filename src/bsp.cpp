@@ -33,17 +33,17 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
 
         switch (classifyRectToPlane(rect, plane))
         {
-        case front:
+        case RectLocation::front:
         {
             frontVec.push_back(rect);
             break;
         }
-        case behind:
+        case RectLocation::behind:
         {
             backVec.push_back(rect);
             break;
         }
-        case straddling:
+        case RectLocation::straddling:
         {
             // split polygon and get 2 parts to push to 2 lists
             SplitRect splitRect = splitRectangleAsPerPlane(rect, plane);
@@ -82,7 +82,7 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
     return new Node{backTree, frontTree, geometryVec, plane};
 }
 
-Rect pickSplittingPlane(std::vector<Rect> geometryVec, int depth, Rect remainingScreen)
+Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
 {
     // Commented code needed to split by median.
     // std::vector<double> xCoordsVec{};
@@ -118,26 +118,26 @@ RectLocation classifyRectToPlane(Rect rect, Rect plane)
         // vertical
         if (rect.corner1.x > plane.corner1.x)
         {
-            return front;
+            return RectLocation::front;
         }
         else if (rect.corner2.x < plane.corner1.x)
         {
-            return behind;
+            return RectLocation::behind;
         }
-        return straddling;
+        return RectLocation::straddling;
     }
     else
     {
         // horizontal
         if (rect.corner2.y < plane.corner1.y)
         {
-            return front;
+            return RectLocation::front;
         }
         else if (rect.corner1.y > plane.corner1.y)
         {
-            return behind;
+            return RectLocation::behind;
         }
-        return straddling;
+        return RectLocation::straddling;
     }
 }
 

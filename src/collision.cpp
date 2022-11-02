@@ -46,12 +46,12 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
 
         switch (location)
         {
-        case positive:
+        case ObjectLocation::positive:
         {
             temp = temp->right;
             break;
         }
-        case negative:
+        case ObjectLocation::negative:
         {
             temp = temp->left;
             break;
@@ -86,17 +86,17 @@ ObjectLocation classifyObjectToPlane(Object obj, Rect plane)
         // vertical
         if (obj.pos.x > plane.corner1.x)
         {
-            return positive;
+            return ObjectLocation::positive;
         }
-        return negative;
+        return ObjectLocation::negative;
     }
     else
     {
         // horizontal
         if (obj.pos.y < plane.corner1.y)
         {
-            return positive;
+            return ObjectLocation::positive;
         }
-        return negative;
+        return ObjectLocation::negative;
     }
 }

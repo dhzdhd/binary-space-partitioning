@@ -19,7 +19,7 @@ int main()
     std::vector<Rect> geometryVecCollision{};
     std::vector<Rect> planeVec{};
 
-    Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, Vector2{1, 1}};
+    Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, getRandomVector(-100, 100)};
     std::vector<Object> objectVec{obj};
 
     Node *root;
@@ -151,8 +151,8 @@ int main()
                 // Check collision of projectile with screen
                 resolveCollisionWithScreen(obj);
 
-                obj.pos.x += obj.vel.x;
-                obj.pos.y += obj.vel.y;
+                obj.pos.x += obj.vel.x * GetFrameTime();
+                obj.pos.y += obj.vel.y * GetFrameTime();
 
                 auto temp = getVecFromTree(root, obj);
                 geometryVecActive.insert(
@@ -237,7 +237,7 @@ double absd(double value)
 Vector2 getRandomVector(int min, int max)
 {
     return Vector2{
-        GetRandomValue(min, max) * 0.05f,
-        GetRandomValue(min, max) * 0.05f,
+        (float)GetRandomValue(min, max),
+        (float)GetRandomValue(min, max),
     };
 }

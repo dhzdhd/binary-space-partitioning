@@ -4,14 +4,14 @@
 #include "sim.hpp"
 #include <vector>
 
-enum Orientation
+enum class Orientation
 {
     vertical,
     horizontal,
     none,
 };
 
-enum RectLocation
+enum class RectLocation
 {
     front,
     behind,
@@ -34,5 +34,5 @@ struct SplitRect
 
 Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen);
 RectLocation classifyRectToPlane(Rect rect, Rect plane);
-Rect pickSplittingPlane(std::vector<Rect> geometryVec, int depth, Rect remainingScreen);
+Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect remainingScreen);
 SplitRect splitRectangleAsPerPlane(Rect rect, Rect plane);
