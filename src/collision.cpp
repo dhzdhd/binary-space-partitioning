@@ -13,7 +13,7 @@ void resolveCollisionWithScreen(Object &obj)
     }
 }
 
-void resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj, std::vector<Rect> &collisionVec)
+void resolveCollisionWithRects(const std::vector<Rect> &rectVec, const Object &obj, std::vector<Rect> &collisionVec)
 {
     for (auto rect : rectVec)
     {
@@ -31,7 +31,7 @@ void resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj, std::vect
     }
 }
 
-std::vector<Rect> getVecFromTree(Node *root, Object &obj)
+std::vector<Rect> getVecFromTree(Node *root, const Object &obj)
 {
     Node *temp = root;
     std::vector<Rect> planeVec{};
@@ -60,7 +60,7 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
 
     // TODO: Move out of this function by returning planeVec
     // Draws partitions as per projectile position
-    for (auto rect : planeVec)
+    for (const Rect &rect : planeVec)
     {
         if (rect.corner1.x == rect.corner2.x)
         {
@@ -76,7 +76,7 @@ std::vector<Rect> getVecFromTree(Node *root, Object &obj)
     return temp->data;
 }
 
-ObjectLocation classifyObjectToPlane(Object obj, Rect plane)
+ObjectLocation classifyObjectToPlane(const Object &obj, const Rect &plane)
 {
     if (plane.corner1.x == plane.corner2.x)
     {

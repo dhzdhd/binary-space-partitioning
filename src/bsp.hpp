@@ -32,7 +32,7 @@ struct SplitRect
     Rect back;
 };
 
-Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen);
-RectLocation classifyRectToPlane(Rect rect, Rect plane);
-Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect remainingScreen);
-SplitRect splitRectangleAsPerPlane(Rect rect, Rect plane);
+Node *createBSPTree(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition);
+RectLocation classifyRectToPlane(const Rect &rect, const Rect &plane);
+Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition);
+SplitRect splitRectangleAsPerPlane(const Rect &rect, const Rect &plane);

@@ -4,8 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include "raymath.h"
 
-Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
+Node *createBSPTree(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition)
 {
     if (geometryVec.empty())
     {
@@ -25,7 +26,7 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
     }
 
     std::vector<Rect> frontVec, backVec;
-    Rect plane = pickSplittingPlane(geometryVec, depth, remainingScreen);
+    Rect plane = pickSplittingPlane(geometryVec, depth, remainingScreen, isMedianPartition);
 
     for (int i = 0; i < numGeometries; i++)
     {
@@ -78,12 +79,12 @@ Node *createBSPTree(std::vector<Rect> &geometryVec, int depth, Rect remainingScr
         frontPlane = Rect{remainingScreen.corner1, plane.corner2};
         backPlane = Rect{plane.corner1, remainingScreen.corner2};
     }
-    Node *frontTree = createBSPTree(frontVec, depth + 1, frontPlane);
-    Node *backTree = createBSPTree(backVec, depth + 1, backPlane);
+    Node *frontTree = createBSPTree(frontVec, depth + 1, frontPlane, isMedianPartition);
+    Node *backTree = createBSPTree(backVec, depth + 1, backPlane, isMedianPartition);
     return new Node{backTree, frontTree, geometryVec, plane};
 }
 
-Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect remainingScreen)
+Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition)
 {
     // Commented code needed to split by median.
     std::vector<double> xCoordsVec{};
@@ -95,28 +96,58 @@ Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, Rect re
         yCoordsVec.push_back(absd(rect.corner1.y) + absd(rect.corner2.y - rect.corner1.y) / 2.0);
     }
 
-    auto xMax = std::max_element(xCoordsVec.begin(), xCoordsVec.end());
-    auto xMin = std::min_element(xCoordsVec.begin(), xCoordsVec.end());
-
-    // std::sort(xCoordsVec.begin(), xCoordsVec.end());
-    // std::sort(yCoordsVec.begin(), yCoordsVec.end());
+    std::sort(xCoordsVec.begin(), xCoordsVec.end());
+    std::sort(yCoordsVec.begin(), yCoordsVec.end());
 
     // Alternatively split in half based on depth
     if (depth % 2 == 0)
     {
         // vertical
-        float x = remainingScreen.corner1.x + (remainingScreen.corner2.x - remainingScreen.corner1.x) / 2;
+        float x{};
+        if (!isMedianPartition)
+        {
+            x = remainingScreen.corner1.x + (remainingScreen.corner2.x - remainingScreen.corner1.x) / 2;
+        }
+        else
+        {
+            size_t size = xCoordsVec.size();
+            if (size % 2 != 0)
+            {
+                x = xCoordsVec[size / 2];
+            }
+            else
+            {
+                x = (xCoordsVec[size / 2] + xCoordsVec[(size / 2) - 1]) / 2.f;
+            }
+        }
+
         return Rect{Vector2{x, remainingScreen.corner1.y}, Vector2{x, remainingScreen.corner2.y}};
     }
     else
     {
         // horizontal
-        float y = remainingScreen.corner1.y + (remainingScreen.corner2.y - remainingScreen.corner1.y) / 2;
+        float y{};
+        if (!isMedianPartition)
+        {
+            y = remainingScreen.corner1.y + (remainingScreen.corner2.y - remainingScreen.corner1.y) / 2;
+        }
+        else
+        {
+            size_t size = yCoordsVec.size();
+            if (size % 2 != 0)
+            {
+                y = yCoordsVec[size / 2];
+            }
+            else
+            {
+                y = (yCoordsVec[size / 2] + yCoordsVec[(size / 2) - 1]) / 2.f;
+            }
+        }
         return Rect{Vector2{remainingScreen.corner1.x, y}, Vector2{remainingScreen.corner2.x, y}};
     }
 }
 
-RectLocation classifyRectToPlane(Rect rect, Rect plane)
+RectLocation classifyRectToPlane(const Rect &rect, const Rect &plane)
 {
     if (plane.corner1.x == plane.corner2.x)
     {
@@ -146,7 +177,7 @@ RectLocation classifyRectToPlane(Rect rect, Rect plane)
     }
 }
 
-SplitRect splitRectangleAsPerPlane(Rect rect, Rect plane)
+SplitRect splitRectangleAsPerPlane(const Rect &rect, const Rect &plane)
 {
     if (plane.corner1.x == plane.corner2.x)
     {

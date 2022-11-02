@@ -15,6 +15,7 @@ int main()
     bool isRectangleMode{true};
     bool isGeometryUpdated{false};
     bool isBSPCollision{true};
+    bool isMedianPartition{false};
 
     std::vector<Rect> geometryVec{};
     std::vector<Rect> geometryVecActive{};
@@ -29,9 +30,7 @@ int main()
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
 
-    Player player = {Vector2{5, 5}, Vector2{-10, 10}};
-
-    SetTargetFPS(60);
+    SetTargetFPS(144);
 
     // Main game loop
     while (!WindowShouldClose())
@@ -48,6 +47,10 @@ int main()
         if (IsKeyPressed(KEY_D))
         {
             isBSPCollision = !isBSPCollision;
+        }
+        if (IsKeyPressed(KEY_A))
+        {
+            isMedianPartition = !isMedianPartition;
         }
 
         if (isRectangleMode)
@@ -74,61 +77,6 @@ int main()
         else
         {
             // Sim Mode
-            if (IsKeyDown(KEY_RIGHT))
-            {
-                player.vel.x = 200 * GetFrameTime();
-            }
-            if (IsKeyDown(KEY_LEFT))
-            {
-                player.vel.x = -200 * GetFrameTime();
-            }
-            if (IsKeyDown(KEY_UP))
-            {
-                player.vel.y = -200 * GetFrameTime();
-            }
-            if (IsKeyDown(KEY_DOWN))
-            {
-                player.vel.y = 200 * GetFrameTime();
-            }
-            if (IsKeyReleased(KEY_LEFT) || IsKeyReleased(KEY_RIGHT))
-            {
-                player.vel.x = 0;
-            }
-            if (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN))
-            {
-                player.vel.y = 0;
-            }
-
-            if (player.pos.x < 0)
-            {
-                player.pos.x = 0;
-            }
-            if (player.pos.x > SCREEN_WIDTH)
-            {
-                player.pos.x = SCREEN_WIDTH;
-            }
-            if (player.pos.y < 0)
-            {
-                player.pos.y = 0;
-            }
-            if (player.pos.y > SCREEN_HEIGHT)
-            {
-                player.pos.y = SCREEN_HEIGHT;
-            }
-
-            // Move player
-            player.pos.x += player.vel.x;
-            player.pos.y += player.vel.y;
-
-            // Create projectile
-            // if (IsMouseButtonPressed(0))
-            // {
-            //     Vector2 pos = GetMousePosition();
-            //     objectVec.push_back(Object{
-            //         player.pos,
-            //         Vector2{100, 100},
-            //     });
-            // }
 
             Node *root;
             // Create BSP tree based on geometryVec
@@ -136,16 +84,13 @@ int main()
             {
                 isGeometryUpdated = true;
 
-                root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}});
+                root = createBSPTree(geometryVec, 0, Rect{Vector2{0, 0}, Vector2{SCREEN_WIDTH, SCREEN_HEIGHT}}, isMedianPartition);
 
                 if (root == nullptr)
                 {
                     isRectangleMode = true;
                 }
             }
-
-            // int depth = 0;
-            // Node *temp = root;
 
             if (IsMouseButtonPressed(0))
             {
@@ -168,10 +113,6 @@ int main()
                         temp.begin(),
                         temp.end());
                     resolveCollisionWithRects(geometryVecActive, obj, geometryVecCollision);
-                    // geometryVecCollision.insert(
-                    //     geometryVecCollision.end(),
-                    //     temp.begin(),
-                    //     temp.end());
                 }
                 else
                 {
@@ -208,10 +149,6 @@ int main()
             DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(GRAY, 0.1f));
         }
 
-        // geometryVecActive.clear();
-
-        // DrawCircle(player.pos.x, player.pos.y, 5, BLACK);
-
         if (!isRectangleMode)
         {
             // Draw active rectangles
@@ -233,8 +170,6 @@ int main()
             geometryVecCollision.clear();
         }
 
-        // DrawCircle(obj.pos.x, obj.pos.y, 5, BLUE);
-
         EndDrawing();
     }
 
@@ -243,12 +178,12 @@ int main()
     return 0;
 }
 
-double absd(double value)
+double absd(const double value)
 {
     return value < 0 ? -value : value;
 }
 
-Vector2 getRandomVector(int min, int max)
+Vector2 getRandomVector(const int min, const int max)
 {
     return Vector2{
         (float)GetRandomValue(min, max),

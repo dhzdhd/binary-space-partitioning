@@ -22,5 +22,5 @@ struct Player
     Vector2 vel;
 };
 
-double absd(double val);
-Vector2 getRandomVector(int min, int max);
+double absd(const double val);
+Vector2 getRandomVector(const int min, const int max);
