@@ -5,6 +5,7 @@
 #include "collision.hpp"
 #include <vector>
 #include <iostream>
+#include "naive_collision.hpp"
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
 
     bool isRectangleMode{true};
     bool isGeometryUpdated{false};
+    bool isBSPCollision{true};
 
     std::vector<Rect> geometryVec{};
     std::vector<Rect> geometryVecActive{};
@@ -42,6 +44,10 @@ int main()
         if (IsKeyPressed(KEY_S))
         {
             isRectangleMode = !isRectangleMode;
+        }
+        if (IsKeyPressed(KEY_D))
+        {
+            isBSPCollision = !isBSPCollision;
         }
 
         if (isRectangleMode)
@@ -126,7 +132,7 @@ int main()
 
             Node *root;
             // Create BSP tree based on geometryVec
-            if (!isGeometryUpdated)
+            if (!isGeometryUpdated && isBSPCollision)
             {
                 isGeometryUpdated = true;
 
@@ -154,16 +160,23 @@ int main()
                 obj.pos.x += obj.vel.x * GetFrameTime();
                 obj.pos.y += obj.vel.y * GetFrameTime();
 
-                auto temp = getVecFromTree(root, obj);
-                geometryVecActive.insert(
-                    geometryVecActive.end(),
-                    temp.begin(),
-                    temp.end());
-                temp = resolveCollisionWithRects(geometryVecActive, obj);
-                geometryVecCollision.insert(
-                    geometryVecCollision.end(),
-                    temp.begin(),
-                    temp.end());
+                if (isBSPCollision)
+                {
+                    auto temp = getVecFromTree(root, obj);
+                    geometryVecActive.insert(
+                        geometryVecActive.end(),
+                        temp.begin(),
+                        temp.end());
+                    resolveCollisionWithRects(geometryVecActive, obj, geometryVecCollision);
+                    // geometryVecCollision.insert(
+                    //     geometryVecCollision.end(),
+                    //     temp.begin(),
+                    //     temp.end());
+                }
+                else
+                {
+                    resolveNaiveCollisionWithRects(geometryVec, obj, geometryVecCollision);
+                }
             }
 
             // for (Rect rec : geometryVecActive)

@@ -13,9 +13,8 @@ void resolveCollisionWithScreen(Object &obj)
     }
 }
 
-std::vector<Rect> resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj)
+void resolveCollisionWithRects(std::vector<Rect> rectVec, Object &obj, std::vector<Rect> &collisionVec)
 {
-    std::vector<Rect> collisionVec{};
     for (auto rect : rectVec)
     {
         Rectangle raylibRect = Rectangle{
@@ -30,8 +29,6 @@ std::vector<Rect> resolveCollisionWithRects(std::vector<Rect> rectVec, Object &o
             collisionVec.push_back(rect);
         }
     }
-
-    return collisionVec;
 }
 
 std::vector<Rect> getVecFromTree(Node *root, Object &obj)
