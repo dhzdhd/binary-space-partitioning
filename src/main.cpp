@@ -5,6 +5,7 @@
 #include "collision.hpp"
 #include <vector>
 #include <iostream>
+#include <string>
 #include "naive_collision.hpp"
 
 int main()
@@ -68,6 +69,9 @@ int main()
                 Vector2 dragVec = GetGestureDragVector();
                 mouseDraggedPos = Vector2{mousePos.x + dragVec.x * SCREEN_WIDTH, mousePos.y + dragVec.y * SCREEN_HEIGHT};
                 std::cout << mouseDraggedPos.x << " " << mouseDraggedPos.y << "\n";
+
+                Rect rec = Rect{mousePos, mouseDraggedPos};
+                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(GRAY, 0.1f));
             }
             if (IsMouseButtonReleased(0))
             {
@@ -142,6 +146,7 @@ int main()
         DrawFPS(0, 0);
         DrawText(isRectangleMode ? "Rectangle Mode" : "Sim Mode", 0, 20, 20, GREEN);
         DrawText(isBSPCollision ? "BSP collision" : "Naive collision", 0, 40, 20, GREEN);
+        DrawText(std::to_string(objectVec.size()).c_str(), 0, 60, 20, GREEN);
 
         // Draw handmade rectangles
         for (Rect rec : geometryVec)
