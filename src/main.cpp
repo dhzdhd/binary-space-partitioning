@@ -31,7 +31,7 @@ int main()
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
 
-    SetTargetFPS(144);
+    SetTargetFPS(60);
 
     // Main game loop
     while (!WindowShouldClose())

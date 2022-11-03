@@ -3,7 +3,7 @@ project(bsp)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 # Dependencies
 set(RAYLIB_VERSION 4.2.0)
