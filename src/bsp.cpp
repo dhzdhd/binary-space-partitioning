@@ -8,12 +8,13 @@
 
 Node *createBSPTree(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition)
 {
-    if (geometryVec.empty())
+    int numGeometries = geometryVec.size();
+
+    if (numGeometries < 2)
     {
         return nullptr;
     }
 
-    int numGeometries = geometryVec.size();
     if (depth >= 10 || numGeometries <= 2)
     {
         std::cout << "depth: " << depth << std::endl;
@@ -21,7 +22,7 @@ Node *createBSPTree(const std::vector<Rect> &geometryVec, int depth, const Rect 
             nullptr,
             nullptr,
             geometryVec,
-            Rect{Vector2{0, 0}, Vector2{0, 0}},
+            Rect{Vector2{}, Vector2{}},
         };
     }
 
@@ -81,7 +82,7 @@ Node *createBSPTree(const std::vector<Rect> &geometryVec, int depth, const Rect 
     }
     Node *frontTree = createBSPTree(frontVec, depth + 1, frontPlane, isMedianPartition);
     Node *backTree = createBSPTree(backVec, depth + 1, backPlane, isMedianPartition);
-    return new Node{backTree, frontTree, geometryVec, plane};
+    return new Node{backTree, frontTree, std::vector<Rect>{}, plane};
 }
 
 Rect pickSplittingPlane(const std::vector<Rect> &geometryVec, int depth, const Rect &remainingScreen, const bool isMedianPartition)

@@ -25,13 +25,15 @@ int main()
 
     Object obj = Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, getRandomVector(-100, 100)};
     std::vector<Object> objectVec{obj};
-
-    Node *root;
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     objectVec.push_back(Object{Vector2{SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2}, getRandomVector(-100, 100)});
+    // }
 
     Vector2 mousePos{};
     Vector2 mouseDraggedPos{};
 
-    SetTargetFPS(60);
+    SetTargetFPS(300);
 
     // Main game loop
     while (!WindowShouldClose())
@@ -62,20 +64,31 @@ int main()
             if (IsMouseButtonPressed(0))
             {
                 mousePos = GetMousePosition();
-                std::cout << GetMousePosition().x << " " << GetMousePosition().y << "\n";
             }
             if (IsMouseButtonDown(0))
             {
                 Vector2 dragVec = GetGestureDragVector();
                 mouseDraggedPos = Vector2{mousePos.x + dragVec.x * SCREEN_WIDTH, mousePos.y + dragVec.y * SCREEN_HEIGHT};
-                std::cout << mouseDraggedPos.x << " " << mouseDraggedPos.y << "\n";
 
                 Rect rec = Rect{mousePos, mouseDraggedPos};
-                DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, ColorAlpha(GRAY, 0.1f));
+
+                int width = rec.corner2.x - rec.corner1.x;
+                int height = rec.corner2.y - rec.corner1.y;
+
+                if (width > 30 && height > 30)
+                {
+                    DrawRectangle(rec.corner1.x, rec.corner1.y, width, height, ColorAlpha(GRAY, 0.1f));
+                }
             }
             if (IsMouseButtonReleased(0))
             {
-                geometryVec.push_back(Rect{mousePos, mouseDraggedPos});
+
+                int width = mouseDraggedPos.x - mousePos.x;
+                int height = mouseDraggedPos.y - mousePos.y;
+                if (width > 30 && height > 30)
+                {
+                    geometryVec.push_back(Rect{mousePos, mouseDraggedPos});
+                }
             }
         }
         else
@@ -123,20 +136,6 @@ int main()
                     resolveNaiveCollisionWithRects(geometryVec, obj, geometryVecCollision);
                 }
             }
-
-            // for (Rect rec : geometryVecActive)
-            // {
-            //     DrawRectangle(rec.corner1.x, rec.corner1.y, rec.corner2.x - rec.corner1.x, rec.corner2.y - rec.corner1.y, YELLOW);
-            // }
-            // while (temp->left != nullptr && temp != nullptr)
-            // {
-
-            //     DrawRectangle(temp->plane.corner1.x, temp->plane.corner1.y, (depth % 2 == 0) ? 2 : temp->plane.corner2.x - temp->plane.corner1.x, (depth % 2 == 0) ? temp->plane.corner2.y - temp->plane.corner1.y : 2, GREEN);
-            //     std::cout
-            //         << std::endl;
-            //     depth++;
-            //     temp = temp->left;
-            // }
         }
 
         // Draw

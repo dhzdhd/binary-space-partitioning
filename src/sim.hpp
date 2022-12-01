@@ -2,12 +2,13 @@
 #include "raylib.h"
 
 constexpr int SCREEN_WIDTH{1600};
-constexpr int SCREEN_HEIGHT{900};
+constexpr int SCREEN_HEIGHT{1200};
 
 struct Rect
 {
     Vector2 corner1;
     Vector2 corner2;
+    bool isPlane;
 };
 
 struct Object
